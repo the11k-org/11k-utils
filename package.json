@@ -1,0 +1,29 @@
+{
+	"name": "11k-utils",
+	"version": "0.1.0",
+	"description": "",
+	"type": "module",
+	"main": "dist/app.js",
+	"scripts": {
+		"build": "npx tsc",
+		"start": "tsc && node dist/index.js",
+		"dev": "nodemon --exec 'npm run start' --ext ts",
+		"lint": "eslint . --ext .ts",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/axios": "^0.14.4",
+		"async_hooks": "^1.0.0",
+		"axios": "^1.7.7",
+		"express": "^4.21.1",
+		"pino": "^9.5.0",
+		"uuid": "^10.0.0"
+	},
+	"devDependencies": {
+		"@types/express": "^5.0.0",
+		"@types/node": "^22.8.1"
+	}
+}

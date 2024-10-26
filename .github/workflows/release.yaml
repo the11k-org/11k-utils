@@ -1,0 +1,50 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Ensure Initial Tag Exists
+        run: |
+          git fetch --tags
+          if [ -z "$(git tag)" ]; then
+            git tag v0.1.0
+            git push origin v0.1.0
+          fi
+
+      - name: Set up Semantic Versioning
+        id: version
+        run: |
+          git fetch --tags
+          npx standard-version --dry-run
+          VERSION=$(npx -q standard-version --dry-run | grep "tagging release" | awk '{print $3}')
+          echo "::set-output name=VERSION::$VERSION"
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Publish to NPM
+        if: steps.version.outputs.VERSION != ''
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish
+          git push --follow-tags origin main
