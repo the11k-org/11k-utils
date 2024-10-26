@@ -26,6 +26,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install && npm install typescript
+      
+      - name: Setup Git User
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
 
       - name: Ensure Initial Tag Exists
         run: |
@@ -39,7 +44,7 @@ jobs:
         id: version
         run: |
           git fetch --tags
-          npx standard-version --dry-run
+          npx standard-version
           VERSION=$(npx -q standard-version --dry-run | grep "tagging release" | awk '{print $3}')
           echo "new_release_version=$VERSION" >> $GITHUB_OUTPUT
 
